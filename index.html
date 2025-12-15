@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zgadnik</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .game {
+            background: #fff;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            text-align: center;
+            width: 300px;
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+        select, input {
+            padding: 10px;
+            margin: 10px 0;
+            width: 80%;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        #message {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="game">
+        <h1>Zgadnik</h1>
+        <label for="level">Wybierz poziom trudności:</label>
+        <select id="level">
+            <option value="easy">Łatwy (1-10)</option>
+            <option value="medium">Średni (1-50)</option>
+            <option value="hard">Trudny (1-100)</option>
+        </select>
+        <br>
+        <input type="number" id="guess" placeholder="Wpisz liczbę">
+        <br>
+        <button id="check">Sprawdź</button>
+        <button id="restart">Nowa gra</button>
+        <div id="message"></div>
+    </div>
+
+    <script>
+        let secretNumber;
+        let attempts = 0;
+
+        function startGame() {
+            const level = document.getElementById('level').value;
+            switch(level) {
+                case 'easy':
+                    secretNumber = Math.floor(Math.random() * 10) + 1;
+                    break;
+                case 'medium':
+                    secretNumber = Math.floor(Math.random() * 50) + 1;
+                    break;
+                case 'hard':
+                    secretNumber = Math.floor(Math.random() * 100) + 1;
+                    break;
+            }
+            attempts = 0;
+            document.getElementById('message').textContent = 'Spróbuj zgadnąć liczbę!';
+            document.getElementById('guess').value = '';
+        }
+
+        function checkGuess() {
+            const guess = Number(document.getElementById('guess').value);
+            attempts++;
+            if (!guess) {
+                document.getElementById('message').textContent = 'Wpisz poprawną liczbę!';
+                return;
+            }
+            if (guess === secretNumber) {
+                document.getElementById('message').textContent = `Gratulacje! Trafiłeś/aś w ${attempts} próbie! 🎉`;
+            } else if (guess < secretNumber) {
+                document.getElementById('message').textContent = 'Za mało!';
+            } else {
+                document.getElementById('message').textContent = 'Za dużo!';
+            }
+        }
+
+        document.getElementById('check').addEventListener('click', checkGuess);
+        document.getElementById('restart').addEventListener('click', startGame);
+        document.getElementById('level').addEventListener('change', startGame);
+
+        // Start game on load
+        startGame();
+    </script>
+</body>
+</html>
+
